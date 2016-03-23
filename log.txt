@@ -1,0 +1,136 @@
+@author Tony Situ
+==========================
+*   Question Responses   *
+==========================
+1. Python is the language that I am most experienced in, I've been coding in 
+   python since my high school robotics competition and I also have experience
+   using it in a professional context.  In fact I used it while interning last
+   summer at a cloud computing company.  I was tasked with integrating openstack
+   with their product which involved extensive reading, writing, and debugging
+   in python. This also speaks to my experience with Openstack, I spent months
+   as an intern investigating the structure of openstack while working to 
+   integrate it.  I ended up writing code that tweaked the nova and horizon 
+   services as well as their respective policy.json files to not only include
+   additional features but also hook up with the a new caching system to reduce
+   database loads (memcached).  While working there I was also expected to keep
+   track of my work through git and it was my chance to really step up the basic
+   git skills that I had acquired at university classes where our assignments
+   were turned in by committing to a git repository.  Now I can say that I 
+   pretty confident in using git to track, branch, and share my work.
+
+2. I used all 12 hours but in staggered blocks between other obligations such
+   as classes.
+
+3. I developed the solution to the first milestone by reading the ample
+   documentation about installing devstack found on openstack's page.  I also
+   rigorously browsed forums to help root out and fix as many bugs as possible
+   during the installation.  To help write the python script to launch the 
+   virtual machines I browsed the documentation related to the Openstack 
+   command line clients and the Openstack Python Software Development Kit.  
+   Their listed examples were a huge help in understanding how to interact
+   with the openstack services using only environment variables to authenticate
+   without having to go through horizon.
+   For a detailed explanation of the solutions, please read the complete log BELOW.
+
+
+4. I ran into errors while trying to install devstack through cloud-init, and
+   with the parameter OFFLINE=True in the localrc section of the local.conf
+   configuration file. I also ran into problems related to some instances being
+   unreachable from horizon after being launched.
+   Given more time I would investigate to ensure that proper software dependencies
+   are being maintained, that package/api versions are compatible, that the network
+   is configured properly, and test the script more rigorously against additional 
+   suites to ensure proper performance for as many edge cases as possible.
+   For a detailed explanation of these errors, please read the complete log BELOW.
+
+Thank you for reading and if you have any general suggestions or tips on addressing 
+my bugs you can reach me at c2tonyc2@berkeley.edu
+
+===============
+*   Dev Log   *
+===============
+@author Tony Situ 
+
+Milestone 1: Installing Openstack Devstack
+
+	Entry 0: March 18, 10:00 PM
+		Having only ever worked with openstack I had never heard of devstack so
+		my first step was to investigate exactly what it was.  A quick google 
+		search later I ran into resources that indicated that devstack was just
+		a means of deploying openstack.  I read into installation guides and 
+		found other resources that suggested installation procedures.
+	Entry 1: March 18, 10:24 PM
+		Launched an instance of Ubuntu 14.04 Trusty Tahr on VMware Fusion on 
+		which to run devstack installation.  I downloaded the devstack files
+		by cloning the online git repo from github. From here I tried three 
+		different approaches to installing devstack to test the 
+		effectiveness of each.
+	Entry 2: March 19, 12:32 PM
+		I pick up the project again and decide to run the standard procedure
+		as describe in the quick start installation guide without setting up
+		a minimal configuration.  After running stack.sh it successfully 
+		executes and terminates some while later and I am left with an 
+		operational openstack deployment with horizon working properly at 
+		the indicated address. (Snapshot 1, Snapshot 2)
+	Entry 3: March 19, 8:41 PM
+		I try to install devstack again except this time also setting up a
+		minimal configuration as per the installation guide's recommendation.
+		In addition I also add an additional parameter into the configuration,
+		I set the OFFLINE=True in the localrc section of local.conf.  This 
+		however has resulted in poor results since the script fails to execute
+		successfully and exits with an error message concerning generate subunit.
+		I searched for this error and try many solutions proposed on the openstack
+		forums ranging from ensuring that proper dependencies were installed and
+		that existing packages were updated and compatible with openstack but to
+		no avail.  As the night presses on and time consistently ticking away, I
+		lay this pursuit to rest for investigation another time. (Snapshot 3)
+	Entry 4: March 20, 8:22 PM 
+		I try to install devstack again except this time through a package known
+		as cloud-init, an alternative method discussed on the devstack page.  I 
+		create a cloud-init script file through vi on a VM snapshot and then 
+		install the necessary cloud-init package.  I attempted to run the 
+		cloud-init file but it fails to successfully install Openstack in the
+		environment and the script simply exits.   I suspect it has something to do
+		with permissions or improper syntax when I launched it through the command
+		line, however with time ticking away and a whole milestone left undone, I
+		lay this pursuit to rest for investigation another time. (Snapshot 4)
+	Entry 5: March 21, 2:44 PM
+		The last alternative method to devstack installation I used was similar to
+		the one documented in Entry 3 except instead of including a OFFLINE=True 
+		parameter in the localrc section of local.conf, I merely set the absolute
+		minimal parameters as seen in the samples/local.conf file.  I ran the script
+		and it properly executed without any generate subunit failures.  I double 
+		checked that horizon was functioning properly at the same address as shown in
+		snapshot 1.  This method also turned out to be a successful means of 
+		installing devstack. (Snapshot 5)
+
+END MILESTONE 1
+
+Milestone 2: Writing a python script to launch virtual machines
+	
+	Entry 1: March 22, 12:29 PM
+		Having only worked with launching virtual machines through horizon I was not
+		sure where to start with writing a python script independent of horizon.  I
+		concluded that a good place to start learning how to interact with the compute
+		service independently of horizon would be to investigate the nova api client 
+		and its associated documentation.  A quick search later led me to the Python 
+		Command Line Client for each Openstack service as well as the Openstack
+		Python Software Development Kit (SDK).  These resources had exactly what I needed
+		to draft up a script that would allow users to launch virtual machines through
+		the command line or simply by executing the script.  I then also included a parser
+		to allow users to enter in custom arguments for the few parameters required to
+		launch an instance.  This would allow for greater flexibility on the users end to 
+		customize the types of instances that they are launching or to simply default to 
+		set values written in the script's code.  I drafted up the script and ran very 
+		rudimentary tests on the virtual machine.  Many errors arose related to 
+		the network and auth_urls.  However, I have exhausted my 12 hours at this point
+		and could no longer work on debugging network errors in the deployment.  If I had
+		more time I would have investigated the error messages related to some of the 
+		launch failures to see if I could draft up a solution, I suspect that variables
+		such as OS_AUTH_URL aren't set properly amongst other things but ... time is up :( 
+		(Snapshot 6)
+
+END MILESTONE 2
+
+Thank you for reading and if you have any general suggestions or tips on addressing 
+my bugs you can reach me at c2tonyc2@berkeley.edu
